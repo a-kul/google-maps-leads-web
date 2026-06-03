@@ -1,28 +1,20 @@
+import { CheckCircle2, Clock, Loader2, XCircle, Ban } from 'lucide-react'
 import type { JobStatus } from '../types'
 
-const colors: Record<JobStatus, string> = {
-  pending:   'bg-yellow-100 text-yellow-800',
-  running:   'bg-blue-100 text-blue-800',
-  done:      'bg-green-100 text-green-800',
-  failed:    'bg-red-100 text-red-800',
-  cancelled: 'bg-gray-100 text-gray-600',
-}
-
-const labels: Record<JobStatus, string> = {
-  pending:   'Pending',
-  running:   'Running',
-  done:      'Done',
-  failed:    'Failed',
-  cancelled: 'Cancelled',
+const config: Record<JobStatus, { label: string; icon: React.ElementType; cls: string }> = {
+  pending:   { label: 'Pending',   icon: Clock,         cls: 'bg-amber-50  text-amber-700  border-amber-200'  },
+  running:   { label: 'Running',   icon: Loader2,       cls: 'bg-blue-50   text-blue-700   border-blue-200'   },
+  done:      { label: 'Done',      icon: CheckCircle2,  cls: 'bg-green-50  text-green-700  border-green-200'  },
+  failed:    { label: 'Failed',    icon: XCircle,       cls: 'bg-red-50    text-red-700    border-red-200'    },
+  cancelled: { label: 'Cancelled', icon: Ban,           cls: 'bg-slate-50  text-slate-500  border-slate-200'  },
 }
 
 export default function StatusBadge({ status }: { status: JobStatus }) {
+  const { label, icon: Icon, cls } = config[status]
   return (
-    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${colors[status]}`}>
-      {status === 'running' && (
-        <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
-      )}
-      {labels[status]}
+    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border ${cls}`}>
+      <Icon size={11} strokeWidth={2.5} className={status === 'running' ? 'animate-spin' : ''} />
+      {label}
     </span>
   )
 }
